@@ -12,7 +12,7 @@ const todos = ref<Array<Schema['Todo']["type"]>>([]);
 function listTodos() {
   client.models.Todo.observeQuery().subscribe({
     next: ({ items, isSynced }) => {
-      todos.value = items
+      todos.value = items.sort(i => new Date(i.createdAt))
      },
   });
 }
@@ -47,7 +47,7 @@ function deleteTodo(id: string) {
         :key="todo.id"
         @click="deleteTodo(todo.id)"
       >
-        {{ todo.content }}
+        {{ todo.content }}  {{todo.createdAt}}
       </li>
     </ul>
     <div>
