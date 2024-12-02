@@ -3,6 +3,7 @@ import '@/assets/main.css';
 import { onMounted, ref } from 'vue';
 import type { Schema } from '../../amplify/data/resource';
 import { generateClient } from 'aws-amplify/data';
+import { sortBy, parseInt } from 'lodash'
 
 const client = generateClient<Schema>();
 
@@ -12,14 +13,16 @@ const todos = ref<Array<Schema['Todo']["type"]>>([]);
 function listTodos() {
   client.models.Todo.observeQuery().subscribe({
     next: ({ items, isSynced }) => {
-      todos.value = items.sort(i => new Date(i.createdAt))
+      console.log(sortBy(items, 'priority'))
+      todos.value = sortBy(items, 'priority')
      },
   });
 }
 
 function createTodo() {
   client.models.Todo.create({
-    content: window.prompt("Todo content")
+    content: window.prompt("Todo content"),
+    priority: parseInt(window.prompt("Todo priority") || '0')
   }).then(() => {
     // After creating a new todo, update the list of todos
     listTodos();
@@ -47,7 +50,7 @@ function deleteTodo(id: string) {
         :key="todo.id"
         @click="deleteTodo(todo.id)"
       >
-        {{ todo.content }}  {{todo.createdAt}}
+        {{ todo.content }}  {{todo.priority}}
       </li>
     </ul>
     <div>
