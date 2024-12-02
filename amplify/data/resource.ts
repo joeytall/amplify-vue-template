@@ -11,6 +11,7 @@ const schema = a.schema({
     .model({
       content: a.string(),
       priority: a.integer(),
+      note: a.string(),
     })
     .authorization((allow) => [allow.owner()]),
 });

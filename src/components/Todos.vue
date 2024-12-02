@@ -22,6 +22,7 @@ function listTodos() {
 function createTodo() {
   client.models.Todo.create({
     content: window.prompt("Todo content"),
+    note: window.prompt("Todo note"),
     priority: parseInt(window.prompt("Todo priority") || '0')
   }).then(() => {
     // After creating a new todo, update the list of todos
@@ -50,7 +51,7 @@ function deleteTodo(id: string) {
         :key="todo.id"
         @click="deleteTodo(todo.id)"
       >
-        {{ todo.content }}  {{todo.priority}}
+        {{ todo.content }} {{ todo.note }} {{todo.priority}}
       </li>
     </ul>
     <div>
